@@ -68,7 +68,10 @@ else:
 risk_df["Shared Hobby"] = risk_df.apply(lambda row: int(any(hobby in str(row.get("Big Hobbies", "")).lower() for hobby in str(row.get("Little Hobbies", "")).lower().split(","))), axis=1)
 risk_df["Age Difference"] = abs(pd.to_numeric(risk_df.get("Big Age", 0), errors='coerce') - pd.to_numeric(risk_df.get("Little Age", 0), errors='coerce'))
 risk_df["Age Difference"] = risk_df["Age Difference"].fillna(0)
-risk_df["Same Ethnicity"] = (risk_df["Big Ethnicity"] == risk_df["Little Ethnicity"]).astype(int)
+if "Big Ethnicity" in risk_df.columns and "Little Ethnicity" in risk_df.columns:
+    risk_df["Same Ethnicity"] = (risk_df["Big Ethnicity"] == risk_df["Little Ethnicity"]).astype(int)
+else:
+    risk_df["Same Ethnicity"] = 0
 risk_df["Same Zip Code"] = (risk_df["Big Zip"] == risk_df["Little Zip"]).astype(int)
 risk_df["Big Years Volunteering"] = pd.to_numeric(risk_df.get("Big Years Volunteering", 0), errors='coerce').fillna(0)
 risk_df["Little Match Count"] = pd.to_numeric(risk_df.get("Little Match Count", 0), errors='coerce').fillna(0)
@@ -172,5 +175,4 @@ with st.expander("Upload Your Own Matches for Prediction", expanded=False):
             st.error(f"Error processing file: {e}")
 
 st.caption("Built for MinneMUDAC by Team DataBells")
-
 
