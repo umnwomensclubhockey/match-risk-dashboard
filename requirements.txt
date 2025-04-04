@@ -4,5 +4,3 @@ matplotlib
 seaborn
 scikit-learn
 textblob
-wordcloud
-lifelines
