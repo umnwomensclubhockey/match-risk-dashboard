@@ -173,3 +173,4 @@ with st.expander("Upload Your Own Matches for Prediction", expanded=False):
 
 st.caption("Built for MinneMUDAC by Team DataBells")
 
+
