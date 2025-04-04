@@ -82,8 +82,14 @@ if "Big Zip" in risk_df.columns and "Little Zip" in risk_df.columns:
     risk_df["Same Zip Code"] = (risk_df["Big Zip"] == risk_df["Little Zip"]).astype(int)
 else:
     risk_df["Same Zip Code"] = 0
-risk_df["Big Years Volunteering"] = pd.to_numeric(risk_df.get("Big Years Volunteering", 0), errors='coerce').fillna(0)
-risk_df["Little Match Count"] = pd.to_numeric(risk_df.get("Little Match Count", 0), errors='coerce').fillna(0)
+if "Big Years Volunteering" in risk_df.columns:
+    risk_df["Big Years Volunteering"] = pd.to_numeric(risk_df["Big Years Volunteering"], errors='coerce').fillna(0)
+else:
+    risk_df["Big Years Volunteering"] = 0
+if "Little Match Count" in risk_df.columns:
+    risk_df["Little Match Count"] = pd.to_numeric(risk_df["Little Match Count"], errors='coerce').fillna(0)
+else:
+    risk_df["Little Match Count"] = 0
 
 features = ["Early", "Late", "Shift", "Note Duration (days)", "Same Gender", "Shared Hobby", "Age Difference", "Same Ethnicity", "Same Zip Code", "Big Years Volunteering", "Little Match Count"]
 model_df = risk_df.dropna(subset=features + ["Predicted At Risk"])
