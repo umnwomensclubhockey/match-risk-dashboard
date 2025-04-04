@@ -146,6 +146,41 @@ with st.expander("Manual Risk Prediction", expanded=False):
 
 with st.expander("Visual Summaries", expanded=True):
 
+    st.subheader("📘 How Emotional Shift Was Calculated")
+    st.markdown("""
+    Emotional shift represents the change in tone over time in match notes.
+
+    - **Polarity** is calculated using `TextBlob`, ranging from -1 (negative) to +1 (positive).
+    - **Early sentiment** is based on the first few notes; **late sentiment** is from the most recent ones.
+    - **Emotional Shift = Late Polarity − Early Polarity**
+
+    A **positive shift** means the match grew more positive over time, while a **negative shift** may suggest increased strain or challenges.
+    """)
+
+    st.subheader("📊 Linear Discriminant Analysis (LDA) View")
+    from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+    from sklearn.preprocessing import StandardScaler
+
+    try:
+        lda_features = model_df[features]
+        lda_labels = model_df["Predicted At Risk"]
+        X_scaled = StandardScaler().fit_transform(lda_features)
+        lda_model = LDA(n_components=1)
+        lda_transformed = lda_model.fit_transform(X_scaled, lda_labels)
+
+        lda_df = pd.DataFrame({
+            "LDA Component": lda_transformed.flatten(),
+            "Risk": lda_labels
+        })
+
+        fig_lda, ax_lda = plt.subplots(figsize=(8, 4))
+        sns.histplot(data=lda_df, x="LDA Component", hue="Risk", element="step", stat="density", common_norm=False, palette="Set1", ax=ax_lda)
+        ax_lda.set_title("Linear Discriminant Projection: Risk vs Non-Risk Matches")
+        st.pyplot(fig_lda)
+        st.caption("🎯 LDA helps visualize how well your model separates at-risk from not-at-risk matches using all selected features.")
+    except Exception as e:
+        st.warning(f"LDA visualization not available: {e}")
+
     st.subheader("Explore Individual Feature Effects")
 
     # Clean categorical data for consistent analysis
