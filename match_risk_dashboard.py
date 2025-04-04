@@ -169,4 +169,3 @@ with st.expander("Upload Your Own Matches for Prediction", expanded=False):
             st.error(f"Error processing file: {e}")
 
 st.caption("Built for MinneMUDAC by Team DataBells")
-
