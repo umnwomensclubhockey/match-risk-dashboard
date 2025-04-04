@@ -148,6 +148,11 @@ with st.expander("Visual Summaries", expanded=True):
 
     st.subheader("Explore Individual Feature Effects")
 
+    # Clean categorical data for consistent analysis
+    for col in ["Big Gender", "Little Gender", "Big Hobbies", "Little Hobbies", "Big Ethnicity", "Little Ethnicity"]:
+        if col in risk_df.columns:
+            risk_df[col] = risk_df[col].astype(str).str.strip().str.lower()
+
     # Same Gender vs Risk
     if "Same Gender" in risk_df.columns:
         st.markdown("**Same Gender vs At-Risk Prediction**")
@@ -156,6 +161,7 @@ with st.expander("Visual Summaries", expanded=True):
         ax7.set_xticklabels(["Different", "Same"])
         ax7.set_ylabel("% Predicted At Risk")
         st.pyplot(fig7)
+        st.caption("🔎 Matches with same gender appear slightly less likely to be at risk, though this effect is modest.")
 
     # Shared Hobby vs Risk
     if "Shared Hobby" in risk_df.columns:
@@ -164,6 +170,7 @@ with st.expander("Visual Summaries", expanded=True):
         sns.barplot(data=risk_df, x="Shared Hobby", y="Predicted At Risk", estimator=np.mean, ax=ax8)
         ax8.set_xticklabels(["No Shared", "Shared"])
         st.pyplot(fig8)
+        st.caption("🔎 Having a shared hobby may help reduce risk slightly, but this varies depending on match context.")
 
     # Same Ethnicity
     if "Same Ethnicity" in risk_df.columns:
@@ -172,6 +179,7 @@ with st.expander("Visual Summaries", expanded=True):
         sns.barplot(data=risk_df, x="Same Ethnicity", y="Predicted At Risk", estimator=np.mean, ax=ax9)
         ax9.set_xticklabels(["Different", "Same"])
         st.pyplot(fig9)
+        st.caption("🔎 Shared ethnicity shows minimal difference in predicted risk — suggesting the model values other factors more.")
 
     # Same Zip Code
     if "Same Zip Code" in risk_df.columns:
@@ -180,6 +188,7 @@ with st.expander("Visual Summaries", expanded=True):
         sns.barplot(data=risk_df, x="Same Zip Code", y="Predicted At Risk", estimator=np.mean, ax=ax10)
         ax10.set_xticklabels(["Different", "Same"])
         st.pyplot(fig10)
+        st.caption("🔎 Living in the same zip code does not significantly change risk, likely due to urban density or matching policies.")
 
     # Age Difference
     if "Age Difference" in risk_df.columns:
@@ -188,6 +197,7 @@ with st.expander("Visual Summaries", expanded=True):
         sns.violinplot(data=risk_df, x="Predicted At Risk", y="Age Difference", ax=ax11)
         ax11.set_xticklabels(["Not At Risk", "At Risk"])
         st.pyplot(fig11)
+        st.caption("🔎 Larger age differences are slightly more common in higher-risk matches — especially above 10 years.")
 
     # Big Years Volunteering
     if "Big Years Volunteering" in risk_df.columns:
@@ -196,6 +206,7 @@ with st.expander("Visual Summaries", expanded=True):
         sns.boxplot(data=risk_df, x="Predicted At Risk", y="Big Years Volunteering", ax=ax12)
         ax12.set_xticklabels(["Not At Risk", "At Risk"])
         st.pyplot(fig12)
+        st.caption("🔎 Bigs with more volunteering years tend to have lower-risk matches — experience matters!")
 
     # Little Match Count
     if "Little Match Count" in risk_df.columns:
@@ -204,6 +215,7 @@ with st.expander("Visual Summaries", expanded=True):
         sns.boxplot(data=risk_df, x="Predicted At Risk", y="Little Match Count", ax=ax13)
         ax13.set_xticklabels(["Not At Risk", "At Risk"])
         st.pyplot(fig13)
+        st.caption("🔎 Littles with multiple previous matches show slightly higher risk, possibly reflecting historical challenges.")
     st.subheader("Distribution of Predicted Risk")
     risk_counts = risk_df["Predicted At Risk"].value_counts().rename(index={0: "Not At Risk", 1: "At Risk"})
     fig3, ax3 = plt.subplots(figsize=(6, 4))
@@ -249,4 +261,5 @@ with st.expander("Upload Your Own Matches for Prediction", expanded=False):
             st.error(f"Error processing file: {e}")
 
 st.caption("Built for MinneMUDAC by Team DataBells")
+
 
