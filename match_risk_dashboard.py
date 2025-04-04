@@ -40,7 +40,7 @@ match_id = match_lookup[match_id]
 # Load full note history (from training + test sets)
 @st.cache_data
 def load_full_notes():
-    df1 = pd.read_csv("training_data.csv", dtype=str, low_memory=False)
+    df1 = pd.read_csv("https://drive.google.com/uc?id=1Wptg4A4-6Hdh_IuId3wI6tv8rUl5hGJH", dtype=str, low_memory=False)
     df2 = pd.read_csv("test_data.csv", dtype=str, low_memory=False)
     df = pd.concat([df1, df2], ignore_index=True)
     df["Completion Date"] = pd.to_datetime(df["Completion Date"], errors="coerce")
@@ -168,4 +168,5 @@ with st.expander("Upload Your Own Matches for Prediction", expanded=False):
         except Exception as e:
             st.error(f"Error processing file: {e}")
 
-st.caption("Built for MinneMUDAC by the DataBells")
+st.caption("Built for MinneMUDAC by Team DataBells")
+
