@@ -61,7 +61,10 @@ with st.expander("Sentiment Timeline for Selected Match", expanded=True):
     st.pyplot(fig)
 
 # Feature Engineering
-risk_df["Same Gender"] = (risk_df["Big Gender"] == risk_df["Little Gender"]).astype(int)
+if "Big Gender" in risk_df.columns and "Little Gender" in risk_df.columns:
+    risk_df["Same Gender"] = (risk_df["Big Gender"] == risk_df["Little Gender"]).astype(int)
+else:
+    risk_df["Same Gender"] = 0
 risk_df["Shared Hobby"] = risk_df.apply(lambda row: int(any(hobby in str(row.get("Big Hobbies", "")).lower() for hobby in str(row.get("Little Hobbies", "")).lower().split(","))), axis=1)
 risk_df["Age Difference"] = abs(pd.to_numeric(risk_df.get("Big Age", 0), errors='coerce') - pd.to_numeric(risk_df.get("Little Age", 0), errors='coerce'))
 risk_df["Age Difference"] = risk_df["Age Difference"].fillna(0)
@@ -169,3 +172,4 @@ with st.expander("Upload Your Own Matches for Prediction", expanded=False):
             st.error(f"Error processing file: {e}")
 
 st.caption("Built for MinneMUDAC by Team DataBells")
+
