@@ -145,6 +145,65 @@ with st.expander("Manual Risk Prediction", expanded=False):
     st.markdown(f"**Confidence:** {proba*100:.1f}%")
 
 with st.expander("Visual Summaries", expanded=True):
+
+    st.subheader("Explore Individual Feature Effects")
+
+    # Same Gender vs Risk
+    if "Same Gender" in risk_df.columns:
+        st.markdown("**Same Gender vs At-Risk Prediction**")
+        fig7, ax7 = plt.subplots()
+        sns.barplot(data=risk_df, x="Same Gender", y="Predicted At Risk", estimator=np.mean, ax=ax7)
+        ax7.set_xticklabels(["Different", "Same"])
+        ax7.set_ylabel("% Predicted At Risk")
+        st.pyplot(fig7)
+
+    # Shared Hobby vs Risk
+    if "Shared Hobby" in risk_df.columns:
+        st.markdown("**Shared Hobby vs At-Risk Prediction**")
+        fig8, ax8 = plt.subplots()
+        sns.barplot(data=risk_df, x="Shared Hobby", y="Predicted At Risk", estimator=np.mean, ax=ax8)
+        ax8.set_xticklabels(["No Shared", "Shared"])
+        st.pyplot(fig8)
+
+    # Same Ethnicity
+    if "Same Ethnicity" in risk_df.columns:
+        st.markdown("**Same Ethnicity vs At-Risk Prediction**")
+        fig9, ax9 = plt.subplots()
+        sns.barplot(data=risk_df, x="Same Ethnicity", y="Predicted At Risk", estimator=np.mean, ax=ax9)
+        ax9.set_xticklabels(["Different", "Same"])
+        st.pyplot(fig9)
+
+    # Same Zip Code
+    if "Same Zip Code" in risk_df.columns:
+        st.markdown("**Same Zip Code vs At-Risk Prediction**")
+        fig10, ax10 = plt.subplots()
+        sns.barplot(data=risk_df, x="Same Zip Code", y="Predicted At Risk", estimator=np.mean, ax=ax10)
+        ax10.set_xticklabels(["Different", "Same"])
+        st.pyplot(fig10)
+
+    # Age Difference
+    if "Age Difference" in risk_df.columns:
+        st.markdown("**Age Difference vs At-Risk Prediction**")
+        fig11, ax11 = plt.subplots()
+        sns.violinplot(data=risk_df, x="Predicted At Risk", y="Age Difference", ax=ax11)
+        ax11.set_xticklabels(["Not At Risk", "At Risk"])
+        st.pyplot(fig11)
+
+    # Big Years Volunteering
+    if "Big Years Volunteering" in risk_df.columns:
+        st.markdown("**Big Years Volunteering by Risk**")
+        fig12, ax12 = plt.subplots()
+        sns.boxplot(data=risk_df, x="Predicted At Risk", y="Big Years Volunteering", ax=ax12)
+        ax12.set_xticklabels(["Not At Risk", "At Risk"])
+        st.pyplot(fig12)
+
+    # Little Match Count
+    if "Little Match Count" in risk_df.columns:
+        st.markdown("**Little Match Count by Risk**")
+        fig13, ax13 = plt.subplots()
+        sns.boxplot(data=risk_df, x="Predicted At Risk", y="Little Match Count", ax=ax13)
+        ax13.set_xticklabels(["Not At Risk", "At Risk"])
+        st.pyplot(fig13)
     st.subheader("Distribution of Predicted Risk")
     risk_counts = risk_df["Predicted At Risk"].value_counts().rename(index={0: "Not At Risk", 1: "At Risk"})
     fig3, ax3 = plt.subplots(figsize=(6, 4))
@@ -190,3 +249,4 @@ with st.expander("Upload Your Own Matches for Prediction", expanded=False):
             st.error(f"Error processing file: {e}")
 
 st.caption("Built for MinneMUDAC by Team DataBells")
+
